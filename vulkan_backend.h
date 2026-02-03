@@ -60,9 +60,9 @@ std::vector<Texture> textures = {
 
 //Thing to be rendered
 struct RenderObject {
-    uint16_t meshIndex;
-    uint16_t materialIndex;
     uint16_t shaderIndex;
+    uint16_t materialIndex;
+    uint16_t meshIndex;
 };
 
 struct Material {
@@ -73,29 +73,48 @@ struct Material {
 
 std::vector<Material> materials = {
     Material{
-        textures[0] //Me
+        textures[1] //Me
     },
     Material{
         textures[1] //Moose
     }
 };
 
+struct Shader {
+    const char* vertexShader;
+    const char* fragmentShader;
+
+    VkPipelineLayout pipelineLayout;
+    VkPipeline graphicsPipeline;
+};
+
+std::vector<Shader> shaders = {
+    Shader{
+        "shaders/vert.spv",
+        "shaders/frag.spv"
+    },
+    Shader{
+        "shaders/redVert.spv",
+        "shaders/redFrag.spv"
+    }
+};
+
 std::vector<RenderObject> renderObjects = {
     RenderObject{
         0,
-        0,
-        0
+        1,
+        1
     },
     RenderObject{
         1,
         1,
         0
     },
-    RenderObject{
-        0,
-        1,
-        0
-    }
+    //RenderObject{
+    //    0,
+    //    1,
+    //    1
+    //}
 };
 
 struct CameraBufferObject {
@@ -222,13 +241,13 @@ public:
             vkDestroyBuffer(device, camera.uniformBuffers[i], nullptr);
             vkFreeMemory(device, camera.uniformBuffersMemory[i], nullptr);
         }
-        
+
         vkDestroyDescriptorPool(device, descriptorPool, nullptr);
 
         vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
         vkDestroyDescriptorSetLayout(device, cameraDescriptorSetLayout, nullptr);
 
-        for (auto& renderObject : renderObjects){
+        for (auto& renderObject : renderObjects) {
             vkDestroyBuffer(device, meshes[renderObject.meshIndex].indexBuffer, nullptr);
             vkFreeMemory(device, meshes[renderObject.meshIndex].indexBufferMemory, nullptr);
 
@@ -236,8 +255,10 @@ public:
             vkFreeMemory(device, meshes[renderObject.meshIndex].vertexBufferMemory, nullptr);
         }
 
-        vkDestroyPipeline(device, graphicsPipeline, nullptr);
-        vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
+        for (auto& shader : shaders) {
+            vkDestroyPipeline(device, shader.graphicsPipeline, nullptr);
+            vkDestroyPipelineLayout(device, shader.pipelineLayout, nullptr);
+        }
 
         vkDestroyRenderPass(device, renderPass, nullptr);
 
@@ -330,7 +351,9 @@ private:
 
         createDescriptorSetLayout();
         createCameraDescriptorSetLayout();
-        createGraphicsPipeline();
+        for (auto& shader : shaders){
+            createGraphicsPipeline(shader);
+        }
 
         createDepthResources();
         createFramebuffers();
@@ -729,10 +752,10 @@ private:
         }
     }
 
-    void createGraphicsPipeline() {
+    void createGraphicsPipeline(Shader& shader) {
         //Read shader code and create modules
-        std::vector<char> vertShaderCode = readFile("shaders/vert.spv");
-        std::vector<char> fragShaderCode = readFile("shaders/frag.spv");
+        std::vector<char> vertShaderCode = readFile(shader.vertexShader);
+        std::vector<char> fragShaderCode = readFile(shader.fragmentShader);
 
         VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
         VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
@@ -844,7 +867,7 @@ private:
         pipelineLayoutInfo.pushConstantRangeCount = 1;
         pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
 
-        if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
+        if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &shader.pipelineLayout) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create pipeline layout!");
         }
 
@@ -863,7 +886,7 @@ private:
         pipelineInfo.pColorBlendState = &colorBlending;
         pipelineInfo.pDynamicState = &dynamicState;
 
-        pipelineInfo.layout = pipelineLayout;
+        pipelineInfo.layout = shader.pipelineLayout;
 
         pipelineInfo.renderPass = renderPass;
         pipelineInfo.subpass = 0;
@@ -871,7 +894,7 @@ private:
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
         pipelineInfo.basePipelineIndex = -1;
 
-        if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
+        if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &shader.graphicsPipeline) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create graphics pipeline!");
         }
 
@@ -1045,9 +1068,6 @@ private:
         //Begin render pass
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-        //Bind graphics pipeline
-        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
-
         //Set dynamic functions
         VkViewport viewport{};
         viewport.x = 0.0f;
@@ -1063,15 +1083,37 @@ private:
         scissor.extent = swapChainExtent;
         vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-        //Bind main camera descriptor set
-        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &cameraDescriptorSets[currentFrame], 0, nullptr);
+        //Bind graphics pipeline
+        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaders[0].graphicsPipeline);
 
-        
+        //Bind main camera descriptor set
+        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaders[0].pipelineLayout, 0, 1, &cameraDescriptorSets[currentFrame], 0, nullptr);
+
+        //bind shader 0
+        //bind material 0 
+        // for each object
+        //if shaderindex != currentshader
+        //  bind renderobject.shader
+        //  current shader = renderobject.shader
+        //same for material
+
 
         //Issue draw command for triangle
+        int currentShader = 0;
+        int currentMaterial = 0;
+        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaders[0].pipelineLayout, 1, 1, &materials[0].descriptorSets[currentFrame], 0, nullptr);
         for (auto& renderObject : renderObjects){ //!!!!MAKE THIS ACTUALLY WORK PROPERLY!!!!
-            //Bind the descriptor sets for material
-            vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 1, 1, &materials[renderObject.materialIndex].descriptorSets[currentFrame], 0, nullptr);
+            if (renderObject.shaderIndex != currentShader) {
+                //Bind the graphics pipeline for shader
+                vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaders[renderObject.shaderIndex].graphicsPipeline);
+                currentShader = renderObject.shaderIndex;
+            }
+            
+            if (renderObject.materialIndex != currentMaterial) {
+                //Bind the descriptor sets for material
+                vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaders[currentShader].pipelineLayout, 1, 1, &materials[renderObject.materialIndex].descriptorSets[currentFrame], 0, nullptr);
+                currentMaterial = renderObject.materialIndex;
+            }
 
             VkBuffer vertexBuffers[] = { meshes[renderObject.meshIndex].vertexBuffer };
             VkDeviceSize offsets[] = { 0 };
@@ -1079,7 +1121,7 @@ private:
             vkCmdBindIndexBuffer(commandBuffer, meshes[renderObject.meshIndex].indexBuffer, 0, VK_INDEX_TYPE_UINT16);
 
             //Push the mesh's model constant to the shader
-            vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(glm::mat4), &meshes[renderObject.meshIndex].model);
+            vkCmdPushConstants(commandBuffer, shaders[0].pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(glm::mat4), &meshes[renderObject.meshIndex].model);
 
             vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(meshes[renderObject.meshIndex].indices.size()), 1, 0, 0, 0);
         }
@@ -1792,9 +1834,9 @@ private:
 
     VkDescriptorSetLayout descriptorSetLayout;
     VkDescriptorSetLayout cameraDescriptorSetLayout;
-    VkPipelineLayout pipelineLayout;
 
-    VkPipeline graphicsPipeline;
+    //VkPipelineLayout pipelineLayout;
+    //VkPipeline graphicsPipeline;
 
     VkCommandPool commandPool;
     std::vector<VkCommandBuffer> commandBuffers;
