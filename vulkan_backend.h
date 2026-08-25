@@ -51,10 +51,10 @@ struct Texture {
 
 std::vector<Texture> textures = {
     Texture{
-        "textures/daniel23.jpg" //Me
+        "textures/img1.JPG"
     },
     Texture{
-        "textures/daniel2.jpg" //Moose
+        "textures/img2.JPG"
     }
 };
 
@@ -73,10 +73,10 @@ struct Material {
 
 std::vector<Material> materials = {
     Material{
-        textures[1] //Me
+        textures[0]
     },
     Material{
-        textures[1] //Moose
+        textures[1]
     }
 };
 
@@ -106,8 +106,8 @@ std::vector<RenderObject> renderObjects = {
         1
     },
     RenderObject{
-        1,
-        1,
+        0,
+        0,
         0
     },
     //RenderObject{
@@ -332,11 +332,11 @@ private:
         init_info.DescriptorPool = imguiPool;
         init_info.MinImageCount = static_cast<uint32_t>(swapChainImages.size());
         init_info.ImageCount = static_cast<uint32_t>(swapChainImages.size());
-        init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
-        init_info.RenderPass = renderPass;
+        init_info.PipelineInfoMain.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
+        init_info.PipelineInfoMain.RenderPass = renderPass;
 
         ImGui_ImplVulkan_Init(&init_info);
-    }
+    } 
 
     void initVulkan() {
         createInstance();
@@ -407,8 +407,8 @@ private:
         createInfo.enabledExtensionCount = glfwExtensionCount;
         createInfo.ppEnabledExtensionNames = glfwExtensions;
 
-        createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
-        createInfo.ppEnabledLayerNames = validationLayers.data();
+        createInfo.enabledLayerCount = 0;
+        createInfo.ppEnabledLayerNames = nullptr;
 
         //Create the Vulkan instance
         if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS) {
@@ -1278,9 +1278,9 @@ private:
             * glm::mat4_cast(glm::quat(glm::radians(glm::vec3(rotation.x, rotation.y, rotation.z))))
             * glm::scale(glm::mat4(1.0f), glm::vec3(scale.x, scale.y, scale.z));
 
-        cbo.view = glm::lookAt(glm::vec3(2.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        cbo.view = glm::lookAt(glm::vec3(2.0f, 1.0f, 0.5f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-        cbo.proj = glm::perspective(glm::radians(45.0f), swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 10.0f);
+        cbo.proj = glm::perspective(glm::radians(70.0f), swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 10.0f);
         cbo.proj[1][1] *= -1;
 
         //memcpy(meshes[0].uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));

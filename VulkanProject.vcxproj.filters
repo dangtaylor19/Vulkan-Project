@@ -19,34 +19,25 @@
     <Filter Include="Source Files\shaders">
       <UniqueIdentifier>{21d9a244-1f36-4972-85f0-11f91ff1d16a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\imgui">
-      <UniqueIdentifier>{b99a9eae-2e57-4988-be28-6438b6d3154f}</UniqueIdentifier>
+    <Filter Include="Source Files\input">
+      <UniqueIdentifier>{fd7c1a30-9b11-4f52-93e3-75da4c01f172}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\input">
+      <UniqueIdentifier>{24158b48-bf7f-4e15-ad5c-e785cc03f478}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\time">
+      <UniqueIdentifier>{6b34cc24-4fec-4ad2-9f64-81f485191ef6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\time">
+      <UniqueIdentifier>{d23cec72-a234-4d2f-9055-d8dbc6678c40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Imgui">
+      <UniqueIdentifier>{616dbb3c-f946-4f6e-bc83-be33c74a66a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2022\Libraries\imgui\imgui.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2022\Libraries\imgui\imgui_draw.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2022\Libraries\imgui\imgui_impl_glfw.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2022\Libraries\imgui\imgui_impl_opengl3.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2022\Libraries\imgui\imgui_impl_vulkan.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2022\Libraries\imgui\imgui_tables.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2022\Libraries\imgui\imgui_widgets.cpp">
-      <Filter>Source Files\imgui</Filter>
     </ClCompile>
     <ClCompile Include="material.cpp">
       <Filter>Source Files</Filter>
@@ -56,6 +47,27 @@
     </ClCompile>
     <ClCompile Include="shader.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input_manager.cpp">
+      <Filter>Source Files\input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\Visual Studio 18\Libraries\imgui-1.92.9b\imgui.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\Visual Studio 18\Libraries\imgui-1.92.9b\imgui_draw.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\Visual Studio 18\Libraries\imgui-1.92.9b\imgui_tables.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\Visual Studio 18\Libraries\imgui-1.92.9b\imgui_widgets.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\Visual Studio 18\Libraries\imgui-1.92.9b\backends\imgui_impl_glfw.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\Visual Studio 18\Libraries\imgui-1.92.9b\backends\imgui_impl_vulkan.cpp">
+      <Filter>Source Files\Imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +111,12 @@
     </ClInclude>
     <ClInclude Include="vulkan_gpumesh.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input_manager.h">
+      <Filter>Header Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="game_time.h">
+      <Filter>Header Files\time</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

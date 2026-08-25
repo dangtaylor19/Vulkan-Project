@@ -29,26 +29,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -104,13 +104,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\mineb\Documents\Visual Studio 2022\Libraries\glfw-3.4.bin.WIN64\include;C:\Users\mineb\Documents\Visual Studio 2022\Libraries\glm-1.0.2;C:\VulkanSDK\1.4.328.1\Include;C:\Users\mineb\Documents\Visual Studio 2022\Libraries\stb-master;C:\Users\mineb\Documents\Visual Studio 2022\Libraries\tinyobjloader-master;C:\Users\mineb\Documents\Visual Studio 2022\Libraries\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\mineb\Documents\Visual Studio 18\Libraries\imgui-1.92.9b\backends;C:\Users\mineb\Documents\Visual Studio 18\Libraries\glfw-3.4.bin.WIN64\include;C:\Users\mineb\Documents\Visual Studio 18\Libraries\glm;C:\Users\mineb\Documents\VulkanSDK\1.4.328.1\Include;C:\Users\mineb\Documents\Visual Studio 18\Libraries\stb-master;C:\Users\mineb\Documents\Visual Studio 18\Libraries\tinyobjloader-1.0.6;C:\Users\mineb\Documents\Visual Studio 18\Libraries\imgui-1.92.9b;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\VulkanSDK\1.4.328.1\Lib;C:\Users\mineb\Documents\Visual Studio 2022\Libraries\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\mineb\Documents\VulkanSDK\1.4.328.1\Lib;C:\Users\mineb\Documents\Visual Studio 18\Libraries\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -135,13 +135,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2022\Libraries\imgui\imgui.cpp" />
-    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2022\Libraries\imgui\imgui_draw.cpp" />
-    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2022\Libraries\imgui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2022\Libraries\imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2022\Libraries\imgui\imgui_impl_vulkan.cpp" />
-    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2022\Libraries\imgui\imgui_tables.cpp" />
-    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2022\Libraries\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\..\..\..\Documents\Visual Studio 18\Libraries\imgui-1.92.9b\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\..\..\..\Documents\Visual Studio 18\Libraries\imgui-1.92.9b\backends\imgui_impl_vulkan.cpp" />
+    <ClCompile Include="..\..\..\..\Documents\Visual Studio 18\Libraries\imgui-1.92.9b\imgui.cpp" />
+    <ClCompile Include="..\..\..\..\Documents\Visual Studio 18\Libraries\imgui-1.92.9b\imgui_draw.cpp" />
+    <ClCompile Include="..\..\..\..\Documents\Visual Studio 18\Libraries\imgui-1.92.9b\imgui_tables.cpp" />
+    <ClCompile Include="..\..\..\..\Documents\Visual Studio 18\Libraries\imgui-1.92.9b\imgui_widgets.cpp" />
+    <ClCompile Include="input_manager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="material.cpp" />
     <ClCompile Include="mesh.cpp" />
@@ -153,6 +153,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core_headers.h" />
+    <ClInclude Include="game_time.h" />
+    <ClInclude Include="input_manager.h" />
     <ClInclude Include="vector2.h" />
     <ClInclude Include="vulkan_engine_headers.h" />
     <ClInclude Include="material.h" />

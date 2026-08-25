@@ -7,7 +7,7 @@ const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
 
 void initWindow();
-void mainLoop(VulkanBackend app);
+void mainLoop(VulkanBackend& app);
 
 std::vector<Mesh> _meshes;
 
@@ -20,6 +20,70 @@ enum Backend {
 int main() {
     Mesh mesh1 = Mesh();
     Mesh mesh2 = Mesh();
+
+    mesh2.vertices = {
+        // Base (Y = 0.5f)
+        {-0.5f, 0.5f, -0.5f},
+        { 0.5f, 0.5f, -0.5f},
+        { 0.5f, 0.5f,  0.5f},
+        {-0.5f, 0.5f,  0.5f},
+
+        // Front Face
+        { 0.0f, -0.5f,  0.0f}, // Apex
+        {-0.5f,  0.5f,  0.5f}, // Bottom Left
+        { 0.5f,  0.5f,  0.5f}, // Bottom Right
+
+        // Back Face
+        { 0.0f, -0.5f,  0.0f}, // Apex
+        { 0.5f,  0.5f, -0.5f}, // Bottom Left
+        {-0.5f,  0.5f, -0.5f}, // Bottom Right
+
+        // Left Face
+        { 0.0f, -0.5f,  0.0f}, // Apex
+        {-0.5f,  0.5f, -0.5f}, // Bottom Left
+        {-0.5f,  0.5f,  0.5f}, // Bottom Right
+
+        // Right Face
+        { 0.0f, -0.5f,  0.0f}, // Apex
+        { 0.5f,  0.5f,  0.5f}, // Bottom Left
+        { 0.5f,  0.5f, -0.5f}, // Bottom Right
+    };
+
+    mesh2.indices = {
+            0, 2, 1, 0, 3, 2, //Base
+            4, 6, 5,          //Front
+            7, 9, 8,          //Back
+            10, 12, 11,       //Left
+            13, 15, 14,       //Right
+    };
+
+    mesh2.uvs = {
+        // Base
+        {0.0f, 0.0f},
+        {1.0f, 0.0f},
+        {1.0f, 1.0f},
+        {0.0f, 1.0f},
+
+        // Front
+        {0.5f, 0.0f},
+        {0.0f, 1.0f},
+        {1.0f, 1.0f},
+
+        // Back
+        {0.5f, 0.0f},
+        {0.0f, 1.0f},
+        {1.0f, 1.0f},
+
+        // Left
+        {0.5f, 0.0f},
+        {0.0f, 1.0f},
+        {1.0f, 1.0f},
+
+        // Right
+        {0.5f, 0.0f},
+        {0.0f, 1.0f},
+        {1.0f, 1.0f},
+    };
 
     _meshes.push_back(mesh1);
     _meshes.push_back(mesh2);
@@ -43,6 +107,13 @@ int main() {
 
         try {
             app.run(window);
+
+            /*Input*/
+            glfwSetScrollCallback(window, InputManager::scrollCallback);
+            glfwSetMouseButtonCallback(window, InputManager::mouseButtonCallback);
+            glfwSetKeyCallback(window, InputManager::keyCallback);
+            glfwSetCursorPosCallback(window, InputManager::cursorPositionCallback);
+
             mainLoop(app);
         }
         catch (const std::exception& e) {
@@ -66,7 +137,12 @@ void initWindow() {
     window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan Daniel", nullptr, nullptr);
 }
 
-void mainLoop(VulkanBackend app) { //TO-DO: Replace vulkanbackend with abstract backend class
+void mainLoop(VulkanBackend& app) { //TO-DO: Replace vulkanbackend with abstract backend class
+    /*For time delta*/
+    float oldTime = 0;
+
+    Vector2 movement;
+    
     while (!glfwWindowShouldClose(window)) {
         //Input
         glfwPollEvents();
@@ -112,6 +188,33 @@ void mainLoop(VulkanBackend app) { //TO-DO: Replace vulkanbackend with abstract 
 
         //Draw all the data onto the screen
         app.drawFrame();
+
+        //Update Time
+        //GameTime::updateDelta(glfwGetTime() - oldTime);
+        //oldTime = glfwGetTime();
+
+        //---------Process game scripts---------
+        /*Editor Camera Controls*/
+        if (InputManager::GetMouseButton(1)) {
+           // //Movement
+           // movement = Vector2(InputManager::GetAxis("Horizontal") * 8, InputManager::GetAxis("Vertical") * 8);
+           //
+           // Vector3 pos = editorCamera.GetPosition();
+           //
+           // pos += editorCamera.GetRightVec() * movement.x * GameTime::delta;
+           // pos += editorCamera.GetForwardVec() * movement.y * GameTime::delta;
+           //
+           // editorCamera.SetPosition(pos);
+           //
+           // //Rotation
+           // editorCamera.SetRotation(Vector3(editorCamera.GetRotation().x + InputManager::GetMousePositionDelta().y, editorCamera.GetRotation().y - InputManager::GetMousePositionDelta().x, 0));
+        }
+
+
+        InputManager::Update();
+
+        //Reset Scroll Values
+        InputManager::GetMouseScroll("");
     }
 
     ImGui_ImplVulkan_Shutdown();
